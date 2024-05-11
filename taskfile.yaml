@@ -1,0 +1,21 @@
+version: '3'
+
+tasks:
+  build:
+    desc: Build the project JAR file using maven.
+    cmds:
+    - mvn package >/dev/null
+
+  run-jar:
+    internal: true
+    cmds:
+    - java -jar target/{{ .JAR_FILE_NAME }}
+
+  run:
+    desc: Run the project using the generated JAR file.
+    deps: [build]
+    cmds: 
+      - task: run-jar
+        vars:
+          JAR_FILE_NAME:
+            sh: ls -1 target | grep -E "^bank_service_des.*$jar"
