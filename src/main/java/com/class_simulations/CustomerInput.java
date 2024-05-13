@@ -10,6 +10,16 @@ public class CustomerInput {
     @Parsed(field = "Service Time")
     private float serviceTime;
 
+    private int number;
+
+    public int getNumber() {
+        return number;
+    }
+
+    public void setNumber(int number) {
+        this.number = number;
+    }
+
     private float clockTime;
 
     private float serviceStartTime;
@@ -20,11 +30,11 @@ public class CustomerInput {
 
     private int noInQueue;
 
-    private int queueWaitTime;
+    private float queueWaitTime;
 
-    private int systemTime;
+    private float systemTime;
     
-    private int serverIdleTime;
+    private float serverIdleTime;
 
 
     public int getNoInSystem() {
@@ -59,18 +69,6 @@ public class CustomerInput {
         this.serviceStartTime = serviceStartTime;
     }
 
-    public String getInputValues() {
-        return String.format("""
-                    Inter_arrival_time: %s,
-                    Service_time: %s,
-                    Clock_time: %s,
-                """, interArrivalTime, serviceTime, clockTime);
-    }
-
-    public float getArrivalTime() {
-        return serviceTime;
-    }
-
     public float getInterArrivalTime() {
         return interArrivalTime;
     }
@@ -95,28 +93,36 @@ public class CustomerInput {
         this.noInQueue = noInQueue;
     }
 
-    public int getQueueWaitTime() {
+    public float getQueueWaitTime() {
         return queueWaitTime;
     }
 
-    public void setQueueWaitTime(int queueWaitTime) {
+    public void setQueueWaitTime(float queueWaitTime) {
         this.queueWaitTime = queueWaitTime;
     }
 
-    public int getSystemTime() {
+    public float getSystemTime() {
         return systemTime;
     }
 
-    public void setSystemTime(int systemTime) {
+    public void setSystemTime(float systemTime) {
         this.systemTime = systemTime;
     }
 
-    public int getServerIdleTime() {
+    public float getServerIdleTime() {
         return serverIdleTime;
     }
 
-    public void setServerIdleTime(int serverIdleTime) {
+    public void setServerIdleTime(float serverIdleTime) {
         this.serverIdleTime = serverIdleTime;
+    }
+
+    public String getInputValues() {
+        return String.format("""
+                    Inter_arrival_time: %s,
+                    Service_time: %s,
+                    Clock_time: %s,
+                """, interArrivalTime, serviceTime, clockTime);
     }
 
 }

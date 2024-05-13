@@ -2,10 +2,11 @@ package com.class_simulations;
 
 import java.util.List;
 
+// Functions to generate the different event parameters
+
 public class SimulationUtil {
 
     static float getArrivalClockTime(float prev_clock_time, float curr_customer_iat) {
-        // return Float.sum(prev_clock_time, curr_customer_iat);
         return prev_clock_time + curr_customer_iat;
     }
 
@@ -14,7 +15,6 @@ public class SimulationUtil {
     }
 
     static float getServiceEndTime(float service_start_time, float service_time) {
-        // return Float.sum(service_start_time, service_time);
         return service_start_time + service_time;
     }
 
@@ -29,8 +29,20 @@ public class SimulationUtil {
         return no_in_system - 1;
     }
 
-    static float queueWaitTime(float clock_time, float service_start_time) {
+    static float getQueueWaitTime(float clock_time, float service_start_time) {
         return service_start_time - clock_time;
+    }
+
+    static float getSystemTime(float clock_time, float service_end_time) {
+        return service_end_time - clock_time;
+    }
+
+    static float getServerIdleTime(float prev_service_end, float clock_time) {
+        if (prev_service_end == 0) {
+            return Float.valueOf(0).floatValue();
+        } else {
+            return Math.max(0, (clock_time - prev_service_end));
+        }
     }
 
 }
