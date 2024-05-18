@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -21,7 +20,7 @@ public class Main {
                 InputStream csvFileStream = com.class_simulations.Main.class.getClassLoader()
                                 .getResourceAsStream("values.csv");
 
-                ArrayList<CustomerInput> inputs = readInput(csvFileStream);
+                List<CustomerInput> inputs = readInput(csvFileStream);
 
                 StreamUtils
                                 .zipWithIndex(inputs.stream())
@@ -77,7 +76,7 @@ public class Main {
                 printPerfomanceStats(inputs);
         }
 
-        private static ArrayList<CustomerInput> readInput(InputStream csvFileStream) throws IOException {
+        private static List<CustomerInput> readInput(InputStream csvFileStream) throws IOException {
                 try (Reader reader = new InputStreamReader(csvFileStream);) {
 
                         BeanListProcessor<CustomerInput> rowProcessor = new BeanListProcessor<CustomerInput>(
@@ -91,12 +90,12 @@ public class Main {
                         CsvParser parser = new CsvParser(parserSettings);
                         parser.parse(reader);
 
-                        return (ArrayList<CustomerInput>) rowProcessor.getBeans();
+                        return rowProcessor.getBeans();
 
                 }
         }
 
-        static void printTable(ArrayList<CustomerInput> customerRows) {
+        static void printTable(List<CustomerInput> customerRows) {
 
                 System.out.println(AsciiTable.getTable(customerRows, Arrays.asList(
                                 new Column().header("Customer")
@@ -125,17 +124,19 @@ public class Main {
                                 new Column().header("Time in System")
                                                 .with(customer -> String.format("%.01f", customer.getSystemTime())),
                                 new Column().header("Server Idle Time")
-                                                .with(customer -> String.format("%.01f", customer.getServiceTime())))));
+                                                .with(customer -> String.format("%.01f", customer.getServerIdleTime())))));
         }
 
-        static void printPerfomanceStats(ArrayList<CustomerInput> inputs) {
+        static void printPerfomanceStats(List<CustomerInput> inputs) {
                 List<Float> wait_times = inputs.stream().map((customer) -> customer.getQueueWaitTime()).toList();
                 List<Float> idle_times = inputs.stream().map((customer) -> customer.getServerIdleTime()).toList();
                 List<Float> service_times = inputs.stream().map((customer) -> customer.getServiceTime()).toList();
                 List<Float> system_times = inputs.stream().map((customer) -> customer.getSystemTime()).toList();
-                List<Float> inter_arrival_times = inputs.stream().map((customer) -> customer.getInterArrivalTime()).toList();
+                List<Float> inter_arrival_times = inputs.stream().map((customer) -> customer.getInterArrivalTime())
+                                .toList();
 
                 System.out.println("\nSimulation model performance stats:\n");
+
                 System.out.println(String.format("Average wait time: %.02f",
                                 SimulationUtil.PerformanceStatistics.getAverageWaitTime(wait_times)));
 

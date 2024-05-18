@@ -116,13 +116,4 @@ public class CustomerInput {
     public void setServerIdleTime(float serverIdleTime) {
         this.serverIdleTime = serverIdleTime;
     }
-
-    public String getInputValues() {
-        return String.format("""
-                    Inter_arrival_time: %s,
-                    Service_time: %s,
-                    Clock_time: %s,
-                """, interArrivalTime, serviceTime, clockTime);
-    }
-
 }
