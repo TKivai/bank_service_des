@@ -2,9 +2,10 @@ package com.class_simulations;
 
 import java.util.List;
 
-// Functions to generate the different event parameters
 
 public class SimulationUtil {
+
+    // Functions to generate the different event parameters
 
     class SimulationParameters {
         static float getArrivalClockTime(float prev_clock_time, float curr_customer_iat) {
@@ -46,6 +47,8 @@ public class SimulationUtil {
             }
         }
     }
+
+    // Functions to generate the simulation performance statistics
 
     class PerformanceStatistics {
         public static float getAverageWaitTime(List<Float> wait_times) {
