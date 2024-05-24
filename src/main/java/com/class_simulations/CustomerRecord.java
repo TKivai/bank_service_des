@@ -2,7 +2,7 @@ package com.class_simulations;
 
 import com.univocity.parsers.annotations.*;;
 
-public class CustomerInput {
+public class CustomerRecord {
 
     @Parsed(field = "Inter-Arrival Time")
     private float interArrivalTime;

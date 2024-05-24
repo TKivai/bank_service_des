@@ -3,7 +3,7 @@ package com.class_simulations;
 import java.util.List;
 
 
-public class SimulationUtil {
+public class SimulationFunctions {
 
     // Functions to generate the different event parameters
 
@@ -20,7 +20,7 @@ public class SimulationUtil {
             return service_start_time + service_time;
         }
 
-        static int getNumberInSystem(List<CustomerInput> prev_inputs, float clock_time) {
+        static int getNumberInSystem(List<CustomerRecord> prev_inputs, float clock_time) {
             if (!prev_inputs.isEmpty()) {
                 return (int) prev_inputs.stream().filter(i -> i.getServiceEndTime() > clock_time).count() + 1;
             } else

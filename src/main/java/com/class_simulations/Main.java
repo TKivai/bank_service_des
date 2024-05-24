@@ -20,7 +20,7 @@ public class Main {
                 InputStream csvFileStream = com.class_simulations.Main.class.getClassLoader()
                                 .getResourceAsStream("values.csv");
 
-                List<CustomerInput> inputs = readInput(csvFileStream);
+                List<CustomerRecord> inputs = readInput(csvFileStream);
 
                 StreamUtils
                                 .zipWithIndex(inputs.stream())
@@ -31,34 +31,34 @@ public class Main {
                                         float prev_service_end = customer.getIndex() == 0 ? 0
                                                         : inputs.get((int) customer.getIndex() - 1).getServiceEndTime();
 
-                                        float clock_time = SimulationUtil.SimulationParameters.getArrivalClockTime(
+                                        float clock_time = SimulationFunctions.SimulationParameters.getArrivalClockTime(
                                                         prev_clock_time,
                                                         customer.getValue().getInterArrivalTime());
 
-                                        float service_start_time = SimulationUtil.SimulationParameters
+                                        float service_start_time = SimulationFunctions.SimulationParameters
                                                         .getServiceStartTime(prev_service_end,
                                                                         clock_time);
 
-                                        float service_end_time = SimulationUtil.SimulationParameters.getServiceEndTime(
+                                        float service_end_time = SimulationFunctions.SimulationParameters.getServiceEndTime(
                                                         service_start_time,
                                                         customer.getValue().getServiceTime());
 
-                                        int no_in_system = SimulationUtil.SimulationParameters.getNumberInSystem(
+                                        int no_in_system = SimulationFunctions.SimulationParameters.getNumberInSystem(
                                                         inputs.subList(0, (int) customer.getIndex()),
                                                         clock_time);
 
-                                        int no_in_queue = SimulationUtil.SimulationParameters
+                                        int no_in_queue = SimulationFunctions.SimulationParameters
                                                         .getNoInQueue(no_in_system);
 
-                                        float queue_wait_time = SimulationUtil.SimulationParameters.getQueueWaitTime(
+                                        float queue_wait_time = SimulationFunctions.SimulationParameters.getQueueWaitTime(
                                                         clock_time,
                                                         service_start_time);
 
-                                        float system_time = SimulationUtil.SimulationParameters.getQueueWaitTime(
+                                        float system_time = SimulationFunctions.SimulationParameters.getQueueWaitTime(
                                                         clock_time,
                                                         service_end_time);
 
-                                        float server_idle_time = SimulationUtil.SimulationParameters.getServerIdleTime(
+                                        float server_idle_time = SimulationFunctions.SimulationParameters.getServerIdleTime(
                                                         prev_service_end,
                                                         clock_time);
 
@@ -76,11 +76,11 @@ public class Main {
                 printPerfomanceStats(inputs);
         }
 
-        private static List<CustomerInput> readInput(InputStream csvFileStream) throws IOException {
+        private static List<CustomerRecord> readInput(InputStream csvFileStream) throws IOException {
                 try (Reader reader = new InputStreamReader(csvFileStream);) {
 
-                        BeanListProcessor<CustomerInput> rowProcessor = new BeanListProcessor<CustomerInput>(
-                                        CustomerInput.class);
+                        BeanListProcessor<CustomerRecord> rowProcessor = new BeanListProcessor<CustomerRecord>(
+                                        CustomerRecord.class);
 
                         CsvParserSettings parserSettings = new CsvParserSettings();
                         parserSettings.getFormat().setLineSeparator("\n");
@@ -95,7 +95,7 @@ public class Main {
                 }
         }
 
-        static void printTable(List<CustomerInput> customerRows) {
+        static void printTable(List<CustomerRecord> customerRows) {
 
                 System.out.println(AsciiTable.getTable(customerRows, Arrays.asList(
                                 new Column().header("Customer")
@@ -127,7 +127,7 @@ public class Main {
                                                 .with(customer -> String.format("%.01f", customer.getServerIdleTime())))));
         }
 
-        static void printPerfomanceStats(List<CustomerInput> inputs) {
+        static void printPerfomanceStats(List<CustomerRecord> inputs) {
                 List<Float> wait_times = inputs.stream().map((customer) -> customer.getQueueWaitTime()).toList();
                 List<Float> idle_times = inputs.stream().map((customer) -> customer.getServerIdleTime()).toList();
                 List<Float> service_times = inputs.stream().map((customer) -> customer.getServiceTime()).toList();
@@ -138,25 +138,25 @@ public class Main {
                 System.out.println("\nSimulation model performance stats:\n");
 
                 System.out.println(String.format("Average wait time: %.02f",
-                                SimulationUtil.PerformanceStatistics.getAverageWaitTime(wait_times)));
+                                SimulationFunctions.PerformanceStatistics.getAverageWaitTime(wait_times)));
 
                 System.out.println(String.format("Probability of waiting: %.02f",
-                                SimulationUtil.PerformanceStatistics.getWaitingProbability(wait_times)));
+                                SimulationFunctions.PerformanceStatistics.getWaitingProbability(wait_times)));
 
                 System.out.println(String.format("Proportion of Server Idle Time: %.02f",
-                                SimulationUtil.PerformanceStatistics.getIdleTimeProportion(idle_times,
+                                SimulationFunctions.PerformanceStatistics.getIdleTimeProportion(idle_times,
                                                 inputs.get(inputs.size() - 1).getServiceEndTime())));
                 System.out.println(String.format("Average Service Time: %.02f",
-                                SimulationUtil.PerformanceStatistics.getAverageServiceTime(service_times)));
+                                SimulationFunctions.PerformanceStatistics.getAverageServiceTime(service_times)));
 
                 System.out.println(String.format("Average Waiting Time (for those that wait): %.02f",
-                                SimulationUtil.PerformanceStatistics
+                                SimulationFunctions.PerformanceStatistics
                                                 .getWaitingCustomersAvereageWaitingTime(wait_times)));
 
                 System.out.println(String.format("Average Time Spent In System: %.02f",
-                                SimulationUtil.PerformanceStatistics.getAverageSystemTime(system_times)));
+                                SimulationFunctions.PerformanceStatistics.getAverageSystemTime(system_times)));
 
                 System.out.println(String.format("Average Time Between Arrivals: %.02f",
-                                SimulationUtil.PerformanceStatistics.getAverageInterArrivalTime(inter_arrival_times)));
+                                SimulationFunctions.PerformanceStatistics.getAverageInterArrivalTime(inter_arrival_times)));
         }
 }
